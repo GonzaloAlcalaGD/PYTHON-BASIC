@@ -15,11 +15,11 @@ from typing import Dict
 def set_to_dict(dict_to_update: Dict[str, int], **items_to_set):
     if any(dict_to_update):
         for key, value in dict_to_update.items():
-            for new_key, new_value in items_to_set.items():
-                if key == new_key and value < new_value:
-                    dict_to_update[key] = new_value
+            if key in items_to_set.keys():
+                if value < items_to_set.get(key):
+                    dict_to_update[key] = items_to_set[key]
     else:
-        dict_to_update = items_to_set.keys() | items_to_set.values()
+        dict_to_update = items_to_set
 
     return dict_to_update
 

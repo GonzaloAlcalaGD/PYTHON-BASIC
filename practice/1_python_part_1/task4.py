@@ -6,8 +6,18 @@ Examples:
     >>> calculate_power_with_difference([1, 2, 3])
     [1, 4, 7]  # because [1^2, 2^2 - (1^2 - 1), 3^2 - (2^2 - 2)]
 """
+import math
 from typing import List
 
 
-def calculate_power_with_difference(ints: List[int]) -> List[int]:
-    ...
+def calculate_power_with_difference(ints: List[int]):
+    result = []
+    for item in ints:
+        if ints.index(item) == 0:
+            result.append(round(math.pow(item, 2)))
+        else:
+            result.append(round(math.pow(item, 2) - (math.pow(ints.index(item), 2) - ints.index(item))))
+    return result
+
+
+print(calculate_power_with_difference([1,2,3]))

@@ -34,13 +34,12 @@ def build_from_unique_words(*lines: Iterable[str], word_number: int):
     #Check if the word_numbers it's greater than 0 and lower than our len(list)
     if word_number >= 0 and word_number <= len(ordered_list):
         for value in ordered_list:
-            for subvalue in value:
-                if value.index(subvalue) == word_number and subvalue != '':
-                    my_str.append(subvalue)
+            if value[word_number] != '':
+                my_str.append(value[word_number:word_number+1])
     else:
         my_str.append('\'\'')
 
-    return " ".join(my_str)
+    return " ".join([elem for subelem in my_str for elem in subelem])
 
 
 print(build_from_unique_words('a b c', '1 1 1 2 3', 'cat dog milk', word_number=1))

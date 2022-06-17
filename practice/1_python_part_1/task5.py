@@ -12,5 +12,12 @@ Examples:
 """
 
 
-def remove_duplicated_words(line: str) -> str:
-    ...
+def remove_duplicated_words(line: str):
+    my_list = line.split()
+    new_str = []
+    for elem in list(dict.fromkeys(my_list)):
+        new_str.append(elem)
+    return " ".join(new_str)
+print(remove_duplicated_words('cat cat dog 1 dog 2'))
+print(remove_duplicated_words('cat cat cat'))
+print(remove_duplicated_words('1 2 3'))

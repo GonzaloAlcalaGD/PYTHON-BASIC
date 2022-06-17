@@ -15,5 +15,35 @@ Examples:
 from typing import Iterable
 
 
-def build_from_unique_words(*lines: Iterable[str], word_number: int) -> str:
-    ...
+def build_from_unique_words(*lines: Iterable[str], word_number: int):
+    #Convert input tuple into list
+    list(lines)
+    unordered_list = []
+    ordered_list = []
+    my_str = []
+
+    #Check if the list has values if not return ''
+    if any(lines):
+        for elem in lines:
+            unordered_list.append(elem.split(" "))
+
+    #We get rid of duplicated values
+    for lists in unordered_list:
+        ordered_list.append(list(dict.fromkeys(lists)))
+
+    #Check if the word_numbers it's greater than 0 and lower than our len(list)
+    if word_number >= 0 and word_number <= len(ordered_list):
+        for value in ordered_list:
+            for subvalue in value:
+                if value.index(subvalue) == word_number and subvalue != '':
+                    my_str.append(subvalue)
+    else:
+        my_str.append('\'\'')
+
+    return " ".join(my_str)
+
+
+print(build_from_unique_words('a b c', '1 1 1 2 3', 'cat dog milk', word_number=1))
+print(build_from_unique_words('a b c', '', 'cat dog milk', word_number=0))
+print(build_from_unique_words('1 2', '1 2 3', word_number=10))
+print(build_from_unique_words(word_number=10))

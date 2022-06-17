@@ -8,6 +8,7 @@ Examples:
     {a: 0}
     >>> set_to_dict({'a': 5})
     {'a': 5}
+
 """
 from typing import Dict
 

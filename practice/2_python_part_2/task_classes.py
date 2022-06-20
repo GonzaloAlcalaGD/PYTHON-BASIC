@@ -26,18 +26,39 @@ Methods:
 PEP8 comply strictly.
 """
 import datetime
+from datetime import timedelta
 
 
 class Teacher:
-    ...
+    def __init__(self, last_name, first_name):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def create_homework(self, text, days):
+        return Homework(text, days)
 
 
 class Student:
-    ...
+    def __init__(self, last_name, first_name):
+        self.last_name = last_name
+        self.first_name = first_name
+
+    def do_homework(self, homework):
+        homework.is_active()
 
 
 class Homework:
-    ...
+    def __init__(self, text, deadline):
+        self.text = text
+        self.deadline = datetime.datetime.now() + timedelta(days=deadline)
+        self.created = datetime.datetime.now()
+
+    def is_active(self):
+        if self.deadline > self.created:
+            return print(self.text, self.deadline)
+        else:
+            print('You are late')
+            return None
 
 
 if __name__ == '__main__':

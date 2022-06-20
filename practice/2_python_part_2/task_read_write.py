@@ -13,3 +13,14 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+
+
+def read_files(files):
+    result = []
+    for file in files:
+        with open(file, 'r') as f:
+            result.append(f.read())
+    with open('file.txt', 'w') as file:
+        file.write(','.join(result))
+
+print(read_files(['./files/file_1.txt', './files/file_2.txt', './files/file_3.txt']))

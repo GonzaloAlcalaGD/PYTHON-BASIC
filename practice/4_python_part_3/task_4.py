@@ -13,42 +13,41 @@ Example:
 """
 
 import argparse
+import re
+import sys
+
 from faker import Faker
 from unittest.mock import Mock, patch
 import pytest
 
 
 my_parser = argparse.ArgumentParser(prog='task_4.py',
-                                    usage='$python %(prog)s NUMBER --FIELD=fake_address --FIELD=some_name',
+                                    usage='$python %(prog)s NUMBER --some_name=name',
                                     argument_default=None,
                                     add_help=True,
                                     description='Generate fake names and fake directions',
                                     epilog='Enjoy!')
-
-my_parser.add_argument('NUMBER', help='positive number of generated instances', type=int)
-my_parser.add_argument('FIELD', help='key used in generated dict', type=str)
-my_parser.add_argument('PROVIDER', help='name of Faker provider', type=str)
-
-args = my_parser.parse_args()
-number = args.NUMBER
-field = args.FIELD
-provider = args.PROVIDER
-
 fake = Faker()
 
-def print_name_address(args: argparse.Namespace) -> None:
-    global field, provider
-    for _ in range(args):
-        print(gen_dict(field, provider))
 
+def cli(args: argparse.Namespace) -> None:
+    list_dict = []
+    args.pop(0)
+    items = int(args.pop(0))
+    for item in range(items):
+        temp = {}
+        for argument in args:
+            search = re.search(r'[a-z]', argument, re.I)
+            if search is not None:
+                argument = argument[search.start():]
+                key, value = argument.split('=')
+                instruction = 'fake.' + str(value) + '()'
+                temp[key] = eval(instruction)
+        list_dict.append(temp)
 
-def gen_dict(field, provider):
-    my_dict = {field: fake.name(), provider: fake.address()}
-    return my_dict
+    return list_dict
 
-
-# print_name_address(number)
-
+# print(cli(sys.argv))
 """
 Write test for print_name_address function
 Use Mock for mocking args argument https://docs.python.org/3/library/unittest.mock.html#unittest.mock.Mock
@@ -61,14 +60,16 @@ Example:
 
 # Test
 input_mock = Mock()
-output_mock = Mock()
-# output.method.return_value = {"some_name": "Chad Baird", "fake-address": "62323 Hobbs Green\nMaryshire, WY 48636"}
+input_mock.method.return_value = 'task_4.py 4 some_name=name some_address=address'
 
-@pytest.fixture
-def cli_args():
-    input_mock.method.return_value = 'task_4.py 2 --fake-address=address --some_name=name'
-    return input_mock
+def test_return_type(monkeypatch):
+    result = cli(input_mock.method().split())
+    for elements in result:
+        assert type(elements) is dict
 
+def test_dict_content(monkeypatch):
+    result = cli(input_mock.method().split())
+    for elements in result:
+        for value in elements.values():
+            assert type(value) is str
 
-def test_gen_dict(monkeypatch, cli_args):
-    assert True
